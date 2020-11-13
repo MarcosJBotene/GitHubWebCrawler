@@ -14,6 +14,11 @@ class GitHubWebCrawler
         $this->dom = new DOMDocument();
     }
 
+    public function getUserImage()
+    {
+    }
+
+    // Cria uma configuração pro Proxy.
     private function getContextConnection()
     {
         $arrayConfig = array(
@@ -31,7 +36,8 @@ class GitHubWebCrawler
         return $context;
     }
 
-    public function loadHTML()
+    // Carrega o HTML.
+    private function loadHTML()
     {
         $context = $this->getContextConnection();
         $this->html = file_get_contents($this->url, false, $context);
@@ -40,7 +46,29 @@ class GitHubWebCrawler
 
         $this->dom->loadHTML($this->html);
         libxml_clear_errors();
+    }
 
-        print_r($this->html);
+    // Captura uma Div. 
+    private function captureDivTags()
+    {
+        $divTags = $this->dom->getElementsByTagName('div');
+        return $divTags;
+    }
+
+    // Captura as Divs Internas dentro da Div Principal da Pagina.
+    private function captureInternalDivsApplicationMain($allDivs)
+    {
+        $internalDivs = null;
+
+        foreach ($allDivs as $div) {
+            $class = $div->getAttribute('class');
+
+            if ($class == 'application-main') {
+                $internalDivs = $div->getElementsByTagName('div');
+                break;
+            }
+        }
+
+        return $internalDivs;
     }
 }
