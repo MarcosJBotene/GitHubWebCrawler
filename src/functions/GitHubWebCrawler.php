@@ -16,6 +16,12 @@ class GitHubWebCrawler
 
     public function getUserImage()
     {
+        $this->loadHTML();
+        $divTags = $this->captureDivTags();
+        $internalDiv = $this->captureInternalDivsApplicationMain($divTags);
+        $imgTag = $this->captureImgTag($internalDiv);
+        $arrayImg = $this->getArrayImg($imgTag);
+        return $arrayImg;
     }
 
     // Cria uma configuração pro Proxy.
@@ -72,7 +78,7 @@ class GitHubWebCrawler
         return $internalDivs;
     }
 
-    private function captureImgTags($internalDivs)
+    private function captureImgTag($internalDivs)
     {
         $class = 'flex-shrink-0 col-12 col-md-3 mb-4 mb-md-0';
         $imgTags = null;

@@ -2,4 +2,7 @@
 
 require '../../functions/GitHubWebCrawler.php';
 
-$test = new GitHubWebCrawler();
+$GHWC = new GitHubWebCrawler();
+$img = $GHWC->getUserImage();
+
+print_r($img);
