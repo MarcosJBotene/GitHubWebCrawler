@@ -71,4 +71,30 @@ class GitHubWebCrawler
 
         return $internalDivs;
     }
+
+    private function captureImgTags($internalDivs)
+    {
+        $class = 'flex-shrink-0 col-12 col-md-3 mb-4 mb-md-0';
+        $imgTags = null;
+
+        foreach ($internalDivs as $internalDiv) {
+            $internalClass = $internalDiv->getAttribute('class');
+            if ($internalClass == $class) {
+                $imgTags = $internalDiv->getElementsByTagName('img');
+            }
+        }
+
+        return $imgTags;
+    }
+
+    private function getArrayImg($imgTags)
+    {
+        $arrayImg = [];
+
+        foreach ($imgTags as $img) {
+            $arrayImg[] = $img->nodeValue;
+        }
+
+        return $arrayImg;
+    }
 }
