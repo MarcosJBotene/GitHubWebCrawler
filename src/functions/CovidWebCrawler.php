@@ -14,6 +14,27 @@ class CovidWebCrawler
         $this->dom = new DOMDocument();
     }
 
+    public function getH2Tag()
+    {
+        $this->loadHTML();
+        $divTags = $this->captureDivTags();
+        $internalDivs  = $this->captureMainDiv($divTags);
+        $h2Tag = $this->captureH2Tags($internalDivs);
+        $arrayH2 = $this->getArrayH2($h2Tag);
+        return $arrayH2;
+    }
+
+    public function getSpanTag()
+    {
+        $this->loadHTML();
+        $divTags = $this->captureDivTags();
+        $internalDivs = $this->captureMainDiv($divTags);
+        $spanTag = $this->captureSpanTags($internalDivs);
+        $arraySpan = $this->getArraySpan($spanTag);
+        return $arraySpan;
+    }
+
+    // Cria a configuração com o Proxy.
     private function getContextConnection()
     {
         $arrayConfig = array(
@@ -31,6 +52,7 @@ class CovidWebCrawler
         return $context;
     }
 
+    // Carrega o HTML
     private function loadHTML()
     {
         $context = $this->getContextConnection();
@@ -44,27 +66,80 @@ class CovidWebCrawler
 
     private function captureDivTags()
     {
-        $divTag = $this->dom->getElementsByTagName('div');
-        return $divTag;
-
-        var_dump($divTag);
+        $divTags = $this->dom->getElementsByTagName('div');
+        return $divTags;
     }
 
-    private function captureMainDiv($divTag)
+    private function captureMainDiv($divTags)
     {
         $internalDivs = null;
-        $divClass = 'content';
 
-        foreach ($divTag as $div) {
+        foreach ($divTags as $div) {
             $class = $div->getAttribute('class');
-
-            if ($class == $divClass) {
+            if ($class == 'content') {
                 $internalDivs = $div->getElementsByTagName('div');
             }
         }
 
         return $internalDivs;
+    }
 
-        var_dump($internalDivs);
+    private function captureH2Tags($internalDivs)
+    {
+        $h2Tag = null;
+
+        if (is_array($internalDivs) || is_object($internalDivs)) {
+            foreach ($internalDivs as $div) {
+                $class = $div->getAttribute('class');
+                if ($class == 'cover-list-tile tile-content sortable-tile numeros-governo') {
+                    $h2Tag = $div->getElementsByTagName('h2');
+                }
+            }
+        }
+
+        return $h2Tag;
+    }
+
+    private function captureSpanTags($internalDivs)
+    {
+        $spanTags = null;
+
+        if (is_array($internalDivs) || is_object($internalDivs)) {
+            foreach ($internalDivs as $div) {
+                $class = $div->getAttribute('class');
+
+                if ($class == 'itens') {
+                    $spanTags = $div->getElementsByTagName('span');
+                }
+            }
+        }
+
+        return $spanTags;
+    }
+
+    private function getArrayH2($h2Tag)
+    {
+        $arrayH2 = [];
+
+        if (is_array($h2Tag) || is_object($h2Tag)) {
+            foreach ($h2Tag as $h2) {
+                $arrayH2[] = $h2->nodeValue;
+            }
+        }
+
+        return $arrayH2;
+    }
+
+    private function getArraySpan($spanTags)
+    {
+        $arraySpan = [];
+
+        if (is_array($spanTags) || is_object($spanTags)) {
+            foreach ($spanTags as $span) {
+                $arraySpan[] = $span->nodeValue;
+            }
+        }
+
+        return $arraySpan;
     }
 }
