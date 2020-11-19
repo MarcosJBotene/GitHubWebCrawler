@@ -1,11 +1,12 @@
 <?php
 
-require '../../functions/CovidWebCrawler.php';
+require '../../functions/WebCrawler.php';
 
-$CWC = new CovidWebCrawler();
+$PWC = new WebCrawler();
+$h1Tag = $PWC->getH1Tag();
+$pTag = $PWC->getPTag();
+$imgTag = $PWC->getImgTag();
 
-$h2Tag = $CWC->getH2Tag();
-$spanTag = $CWC->getSpanTag();
-
-print_r($h2Tag);
-print_r($spanTag);
+print_r($h1Tag);
+print_r($pTag);
+print_r($imgTag);
