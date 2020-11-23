@@ -6,11 +6,12 @@
 
 header {
   text-align: center;
+  margin-top: 50px;
+  margin-bottom: -40px;
 }
 
 header h1 {
   font-size: 48px;
-  margin-bottom: 20px;
 }
 
 p {

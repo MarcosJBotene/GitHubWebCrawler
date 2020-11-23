@@ -20,17 +20,16 @@ $imgTag = $PWC->getImgTag();
 </head>
 
 <body>
+    <header>
+        <h1>
+            <?php
+            echo $h1Tag[0];
+            ?>
+        </h1>
+    </header>
+
     <main>
         <div class="container">
-
-            <header>
-                <h1>
-                    <?php
-                    echo $h1Tag[0];
-                    ?>
-                </h1>
-            </header>
-
             <?php for ($i = 1; $i < count($pTag); $i++) : ?>
                 <?php if ($i <= 3) : ?>
                     <p>
